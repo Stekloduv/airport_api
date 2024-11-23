@@ -30,6 +30,10 @@ class Crew(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
 
 class Airport(models.Model):
     name = models.CharField(max_length=100)
@@ -40,9 +44,17 @@ class Airport(models.Model):
 
 
 class Route(models.Model):
-    source = models.ForeignKey(Airport, on_delete=models.CASCADE)
-    destination = models.ForeignKey(Airport, on_delete=models.CASCADE)
-    distance = models.IntegerField()
+    source = models.ForeignKey(
+        Airport,
+        on_delete=models.CASCADE,
+        related_name="routes_as_source"
+    )
+    destination = models.ForeignKey(
+        Airport,
+        on_delete=models.CASCADE,
+        related_name="routes_as_destination"
+    )
+    distance = models.FloatField()
 
     def __str__(self):
         return f"{self.source.name} {self.destination.name}"
